@@ -1,41 +1,3 @@
-from dataclasses import dataclass
-from typing import List, Tuple
-import heapq
-
-@dataclass
-class Packet:
-    slice_id: int
-    packet_id: int
-    arrival_time: int
-    size: int
-    processed: bool = False
-    departure_time: int = 0
-
-@dataclass
-class Slice:
-    slice_id: int
-    bandwidth: float
-    max_delay: int
-    packets: List[Packet]
-    current_packet_idx: int = 0
-    last_departure_time: int = 0
-    packet_count: int = 0
-
-    def has_more_packets(self) -> bool:
-        return self.current_packet_idx < len(self.packets)
-
-    def peek_next_packet(self) -> Packet:
-        if self.has_more_packets():
-            return self.packets[self.current_packet_idx]
-        return None
-
-    def get_next_packet(self) -> Packet:
-        if self.has_more_packets():
-            packet = self.packets[self.current_packet_idx]
-            self.current_packet_idx += 1
-            return packet
-        return None
-
 class NetworkSliceScheduler:
     def __init__(self, port_bandwidth: float):
         self.port_bandwidth = port_bandwidth * 1e9
@@ -169,7 +131,7 @@ def main():
     for i in range(n):
         m, slice_bw, max_delay = map(float, input().split())
         m = int(m)
-        packets_data = [(int(arrival), int(size)) for arrival, size in zip(*[iter(map(int, input().split()))] * 2)]
+        packets_data = [(int(arrival), int(size)) for arrival, size in zip(*[iter(map(int, input.split()))] * 2)]
         scheduler.add_slice(i, slice_bw, int(max_delay), packets_data)
     scheduler.schedule_packets()
     scheduler.print_output()
